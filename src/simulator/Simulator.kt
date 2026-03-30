@@ -1,5 +1,6 @@
 package simulator
 
+import Stats
 import core.*
 import hardware.Alu
 import hardware.ControlUnit
@@ -8,6 +9,20 @@ class Simulator() {
     operator fun invoke(
         architecturalState: ArchitecturalState
     ) {
+        val stats = Stats
+        val asStat = StringBuilder(Int.MAX_VALUE - 2000)
+        while (true) {
+            if (asStat.length > Int.MAX_VALUE / 2) {
+                println(asStat)
+                asStat.clear()
+            }
+
+            if (architecturalState.pc == 0xFFFFFFFF.toInt()) {
+                println(asStat)
+                stats.printStats(architecturalState.getRegister(2))
+                break
+            }
+
             // IF
             val instruction = architecturalState.getNextLine()
 
